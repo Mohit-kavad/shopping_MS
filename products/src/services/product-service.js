@@ -72,28 +72,24 @@ class ProductService {
   }
 
   async GetProductPayload(userId, { productId, qty }, event) {
-    try {
-      const product = await this.repository.FindById(productId);
+    const product = await this.repository.FindById(productId);
 
-      if (product) {
-        const payload = {
-          event: event,
-          data: {
-            userId,
-            product,
-            qty,
-          },
-        };
-        console.log(
-          "payload form getProductPayload using formateData function",
-          FormateData(payload)
-        );
-        return FormateData(payload);
-      } else {
-        return FormateData({ error: "No Product available" });
-      }
-    } catch (error) {
-      throw new APIError("Data Not found");
+    if (product) {
+      const payload = {
+        event: event,
+        data: {
+          userId,
+          product,
+          qty,
+        },
+      };
+      console.log(
+        "payload form getProductPayload using formateData function",
+        FormateData(payload)
+      );
+      return FormateData(payload);
+    } else {
+      return FormateData({ error: "No Product available" });
     }
   }
 }
