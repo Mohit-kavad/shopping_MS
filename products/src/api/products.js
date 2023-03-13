@@ -66,73 +66,79 @@ module.exports = (app) => {
 
     // get payload to send customer service
 
-    const { data } = await service.GetProductPayload(
-      _id,
-      { productId: req.body._id },
-      "ADD_TO_WISHLIST"
-    );
-    console.log("data from product aip getpropayload", data);
-    PublishCustomerEvent(data);
-    return res.status(200).json(data.data.product);
+    try {
+      const { data } = await service.GetProductPayload(
+        _id,
+        { productId: req.body._id, qty: req.body.qty },
+        "ADD_TO_WISHLIST"
+      );
+
+      PublishCustomerEvent(data);
+      return res.status(200).json(data.data.product);
+    } catch (err) {
+      next(err);
+    }
   });
 
   app.delete("/wishlist/:id", UserAuth, async (req, res, next) => {
     const { _id } = req.user;
     const productId = req.params.id;
 
-    const { data } = await service.GetProductPayload(
-      _id,
-      { productId },
-      "REMOVE_FROM_WISHLIST"
-    );
-    PublishCustomerEvent(data);
-    return res.status(200).json(data.data.product);
+    try {
+      const { data } = await service.GetProductPayload(
+        _id,
+        { productId },
+        "REMOVE_FROM_WISHLIST"
+      );
+      PublishCustomerEvent(data);
+      return res.status(200).json(data.data.product);
+    } catch (err) {
+      next(err);
+    }
   });
 
   app.put("/cart", UserAuth, async (req, res, next) => {
     const { _id } = req.user;
 
-    const { data } = service.GetProductPayload(
-      _id,
-      {
-        productId: req.body._id,
-        qty: req.body.qty,
-      },
-      "ADD_TO_CART"
-    );
+    try {
+      const { data } = await service.GetProductPayload(
+        _id,
+        {
+          productId: req.body._id,
+          qty: req.body.qty,
+        },
+        "ADD_TO_CART"
+      );
 
-    PublishCustomerEvent(data);
-    PublishShoppingEvent(data);
+      PublishCustomerEvent(data);
+      PublishShoppingEvent(data);
+      const response = {
+        product: data.data.product,
+        qty: data.data.qty,
+      };
 
-    const response = {
-      product: data.data.product,
-      qty: data.data.qty,
-    };
-
-    return res.status(200).json(response);
+      return res.status(200).json(response);
+    } catch (err) {
+      next(err);
+    }
   });
 
   app.delete("/cart/:id", UserAuth, async (req, res, next) => {
     const { _id } = req.user;
+    const productId = req.params.id;
 
     const { data } = await service.GetProductPayload(
       _id,
-      {
-        productId: req.body._id,
-        qty: req.body.qty,
-      },
+      { productId },
       "REMOVE_FROM_CART"
     );
 
     PublishCustomerEvent(data);
     PublishShoppingEvent(data);
 
-    const response = {
-      productId: req.body._id,
-      qty: req.body.qty,
-    };
+    const response = { product: data.data.product, unit: data.data.qty };
 
-    return res.status(200).json(response);
+    res.status(200).json(response);
   });
 
   //get Top products and category

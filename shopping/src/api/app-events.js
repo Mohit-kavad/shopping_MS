@@ -11,8 +11,7 @@ module.exports = (app) => {
         .status(400)
         .json({ error: "Payload is missing or empty from customers" });
     }
-    console.log("payload from shopping service", payload);
-
+    console.log("payload from shopping", payload);
     service.SubscribeEvents(payload);
 
     console.log("=========Shopping service received event =============== ");

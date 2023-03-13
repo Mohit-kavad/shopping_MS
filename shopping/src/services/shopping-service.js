@@ -39,24 +39,19 @@ class ShoppingService {
   }
 
   async ManageCart(customeId, item, qty, isRemove) {
-    try {
-      const cartResult = await this.repository.AddCartItem(
-        customeId,
-        item,
-        qty,
-        isRemove
-      );
+    const cartResult = await this.repository.AddCartItem(
+      customeId,
+      item,
+      qty,
+      isRemove
+    );
 
-      return FormateData(cartResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    return FormateData(cartResult);
   }
 
   async SubscribeEvents(payload) {
-    payload = JSON.parse(payload);
     const { event, data } = payload;
-
+    console.log("======FROM shopping service =======", data, event);
     const { userId, product, qty } = data;
 
     switch (event) {
@@ -77,7 +72,7 @@ class ShoppingService {
         event: event,
         data: { userId, order },
       };
-      return FormateData(payload);
+      return payload;
     } else {
       return FormateData({ error: "No order is available" });
     }

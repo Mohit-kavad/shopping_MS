@@ -15,7 +15,7 @@ class ErrorLogger {
     LogErrors.log({
       private: true,
       level: "error",
-      message: `${new Date()}-${JSON.stringify(err)}`,
+      message: `${new Date()}-${JSON.stringify(err, 2, null)}`,
     });
     console.log("==================== End Error Logger ===============");
     // log error with Logger plugins

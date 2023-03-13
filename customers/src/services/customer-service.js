@@ -72,95 +72,65 @@ class CustomerService {
   async AddNewAddress(_id, userInputs) {
     const { street, postalCode, city, country } = userInputs;
 
-    try {
-      const addressResult = await this.repository.CreateAddress({
-        _id,
-        street,
-        postalCode,
-        city,
-        country,
-      });
-      return FormateData(addressResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const addressResult = await this.repository.CreateAddress({
+      _id,
+      street,
+      postalCode,
+      city,
+      country,
+    });
+    return FormateData(addressResult);
   }
 
   async GetProfile(id) {
-    try {
-      const existingCustomer = await this.repository.FindCustomerById({ id });
-      return FormateData(existingCustomer);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const existingCustomer = await this.repository.FindCustomerById({ id });
+    return FormateData(existingCustomer);
   }
 
   async GetShopingDetails(id) {
-    try {
-      const existingCustomer = await this.repository.FindCustomerById({ id });
+    const existingCustomer = await this.repository.FindCustomerById({ id });
 
-      if (existingCustomer) {
-        return FormateData(existingCustomer);
-      }
-      return FormateData({ msg: "Error" });
-    } catch (err) {
-      throw new APIError("Data Not found", err);
+    if (existingCustomer) {
+      return FormateData(existingCustomer);
     }
+    return FormateData({ msg: "Error" });
   }
 
   async GetWishList(customerId) {
-    try {
-      const wishListItems = await this.repository.Wishlist(customerId);
-      return FormateData(wishListItems);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const wishListItems = await this.repository.Wishlist(customerId);
+    return FormateData(wishListItems);
   }
 
   async AddToWishlist(customerId, { ...product }) {
-    try {
-      const wishlistResult = await this.repository.AddWishlistItem(customerId, {
-        ...product,
-      });
-      return FormateData(wishlistResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const wishlistResult = await this.repository.AddWishlistItem(customerId, {
+      ...product,
+    });
+    return FormateData(wishlistResult);
   }
 
   async ManageCart(customerId, { ...product }, qty, isRemove) {
-    try {
-      const cartResult = await this.repository.AddCartItem(
-        customerId,
-        { ...product },
-        qty,
-        isRemove
-      );
-      return FormateData(cartResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const cartResult = await this.repository.AddCartItem(
+      customerId,
+      { ...product },
+      qty,
+      isRemove
+    );
+    return FormateData(cartResult);
   }
 
   async ManageOrder(customerId, order) {
-    try {
-      const orderResult = await this.repository.AddOrderToProfile(
-        customerId,
-        order
-      );
-      return FormateData(orderResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const orderResult = await this.repository.AddOrderToProfile(
+      customerId,
+      order
+    );
+    return FormateData(orderResult);
   }
 
   async SubscribeEvents(payload) {
     console.log("Triggering.... Customer Events");
 
-    // payload = JSON.parse(payload);
-
     const { event, data } = payload;
-    console.log("event from customers", payload.event);
+    console.log("event from customers", event);
     const { userId, product, order, qty } = data;
 
     switch (event) {

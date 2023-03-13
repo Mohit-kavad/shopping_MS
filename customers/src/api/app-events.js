@@ -6,6 +6,7 @@ module.exports = (app) => {
   app.use("/app-events", async (req, res) => {
     const { payload } = req.body || {};
 
+    console.log("From Customers event", { payload });
     if (!payload) {
       return res
         .status(400)
