@@ -149,7 +149,11 @@ class CustomerRepository {
       profile.cart = [];
 
       const profileResult = await profile.save();
-
+      console.log(
+        "++++++++++++ FROM cust-repo in ADDORderProfile",
+        profile,
+        profileResult
+      );
       return profileResult;
     }
 

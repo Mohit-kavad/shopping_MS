@@ -17,16 +17,19 @@ class ShoppingService {
   }
 
   async PlaceOrder(userInput) {
-    const { _id, txnNumber } = userInput;
+    // const { _id, txnId } = userInput;
 
     // Verify the txn number with payment logs
 
-    try {
-      const orderResult = await this.repository.CreateNewOrder(_id, txnNumber);
-      return FormateData(orderResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
+    const orderResult = await this.repository.CreateNewOrder(
+      userInput._id,
+      userInput.txnId
+    );
+    console.log(
+      "PLACE ORDER FROM SHOPPING SERVICE ++++++++++============================",
+      orderResult
+    );
+    return FormateData(orderResult);
   }
 
   async GetOrders(customerId) {
@@ -66,11 +69,11 @@ class ShoppingService {
     }
   }
 
-  async GetOrderPayload(userId, order, event) {
-    if (order) {
+  async GetOrderPayload(userId, orders, event) {
+    if (orders) {
       const payload = {
         event: event,
-        data: { userId, order },
+        data: { userId, orders },
       };
       return payload;
     } else {

@@ -7,12 +7,12 @@ module.exports = (app) => {
 
   app.post("/order", UserAuth, async (req, res, next) => {
     const { _id } = req.user;
-    const { txnNumber } = req.body;
+    const { txnId } = req.body;
 
-    const { data } = await service.PlaceOrder({ _id, txnNumber });
+    const { data } = await service.PlaceOrder({ _id, txnId });
 
     const payload = await service.GetOrderPayload(_id, data, "CREATE_ORDER");
-    console.log("**** FROM shopping API *** payload", payload);
+
     PublishCustomerEvent(payload);
     return res.status(200).json(data);
   });

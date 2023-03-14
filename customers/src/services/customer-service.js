@@ -123,6 +123,10 @@ class CustomerService {
       customerId,
       order
     );
+    console.log(
+      "****** ***** **** **** FROM Manage order from cust service ",
+      orderResult
+    );
     return FormateData(orderResult);
   }
 
@@ -130,8 +134,11 @@ class CustomerService {
     console.log("Triggering.... Customer Events");
 
     const { event, data } = payload;
-    console.log("event from customers", event);
-    const { userId, product, order, qty } = data;
+    const { userId, product, orders, qty } = data;
+    console.log(
+      "event from customers data.orders ===+=+=+=+=+=+=+=+=+=+",
+      data
+    );
 
     switch (event) {
       case "ADD_TO_WISHLIST":
@@ -145,7 +152,7 @@ class CustomerService {
         this.ManageCart(userId, product, qty, true);
         break;
       case "CREATE_ORDER":
-        this.ManageOrder(userId, order);
+        this.ManageOrder(userId, orders);
         break;
       case "TESTING":
         console.log("Workign Subscriber");
