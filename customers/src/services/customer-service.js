@@ -7,7 +7,6 @@ const {
   ValidatePassword,
 } = require("../utils");
 const { APIError, BadRequestError } = require("../utils/app-errors");
-
 // All Business logic will be here
 class CustomerService {
   constructor() {
@@ -131,14 +130,10 @@ class CustomerService {
   }
 
   async SubscribeEvents(payload) {
-    console.log("Triggering.... Customer Events");
+    payload = JSON.parse(payload);
 
     const { event, data } = payload;
     const { userId, product, orders, qty } = data;
-    console.log(
-      "event from customers data.orders ===+=+=+=+=+=+=+=+=+=+",
-      data
-    );
 
     switch (event) {
       case "ADD_TO_WISHLIST":

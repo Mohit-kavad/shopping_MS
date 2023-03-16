@@ -53,8 +53,9 @@ class ShoppingService {
   }
 
   async SubscribeEvents(payload) {
+    payload = JSON.parse(payload);
+
     const { event, data } = payload;
-    console.log("======FROM shopping service =======", data, event);
     const { userId, product, qty } = data;
 
     switch (event) {
@@ -69,17 +70,17 @@ class ShoppingService {
     }
   }
 
-  async GetOrderPayload(userId, orders, event) {
-    if (orders) {
-      const payload = {
-        event: event,
-        data: { userId, orders },
-      };
-      return payload;
-    } else {
-      return FormateData({ error: "No order is available" });
-    }
-  }
+  //   async GetOrderPayload(userId, orders, event) {
+  //     if (orders) {
+  //       const payload = {
+  //         event: event,
+  //         data: { userId, orders },
+  //       };
+  //       return payload;
+  //     } else {
+  //       return FormateData({ error: "No order is available" });
+  //     }
+  //   }
 }
 
 module.exports = ShoppingService;
